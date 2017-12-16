@@ -1,0 +1,21 @@
+server {
+        listen 80;
+        server_name 94.247.130.84;
+
+        # gzipping
+        gzip on;
+        gzip_min_length 1000;
+        gzip_types *;
+
+        location / {
+                proxy_pass http://127.0.0.1:5000;
+
+                proxy_set_header HOST $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $remote_addr;
+                proxy_set_header X-Forwarded-Protocol $scheme;
+                proxy_pass_header Authorization;
+                proxy_read_timeout 180;
+                proxy_connect_timeout 180;
+        }
+}

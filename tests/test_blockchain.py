@@ -13,10 +13,12 @@ class BlockchainTestCase(TestCase):
     def create_block(self, proof=123, previous_hash='abc'):
         self.blockchain.new_block(proof, previous_hash)
 
-    def create_transaction(self, sender='a', recipient='b', amount=1):
+    def create_transaction(self, sender='a', recipient='b', product_id=1, rating=1, amount=1):
         self.blockchain.new_transaction(
             sender=sender,
             recipient=recipient,
+            product_id=product_id,
+            rating=rating,
             amount=amount
         )
 

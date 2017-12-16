@@ -40,10 +40,6 @@ class Blockchain:
 
         while current_index < len(chain):
             block = chain[current_index]
-            print(f'{last_block}')
-            print(f'{block}')
-            print("\n-----------\n")
-            # Check that the hash of the block is correct
             if block['previous_hash'] != self.hash(last_block):
                 return False
 
@@ -113,7 +109,7 @@ class Blockchain:
         self.chain.append(block)
         return block
 
-    def new_transaction(self, sender, recipient, amount):
+    def new_transaction(self, sender, recipient, product_id, rating,  contract_id, amount):
         """
         Creates a new transaction to go into the next mined Block
 
@@ -125,6 +121,9 @@ class Blockchain:
         self.current_transactions.append({
             'sender': sender,
             'recipient': recipient,
+            'product_id': product_id,
+            'rating': rating,
+            'contract_id': contract_id,
             'amount': amount,
         })
 
@@ -196,6 +195,9 @@ def mine():
     blockchain.new_transaction(
         sender="0",
         recipient=node_identifier,
+        product_id=0,
+        rating=0,
+        contract_id=0,
         amount=1,
     )
 
@@ -218,12 +220,14 @@ def new_transaction():
     values = request.get_json()
 
     # Check that the required fields are in the POST'ed data
-    required = ['sender', 'recipient', 'amount']
+    required = ['sender', 'recipient', 'product_id', 'rating', 'amount']
     if not all(k in values for k in required):
         return 'Missing values', 400
 
     # Create a new Transaction
-    index = blockchain.new_transaction(values['sender'], values['recipient'], values['amount'])
+    index = blockchain.new_transaction(values['sender'], values['recipient'],
+                                       values['product_id'], values['rating'],
+                                       values['contract_id'], values['amount'])
 
     response = {'message': f'Transaction will be added to Block {index}'}
     return jsonify(response), 201
